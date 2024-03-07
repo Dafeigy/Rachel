@@ -4,28 +4,26 @@
  * @brief Ref: https://github.com/m5stack/M5Unified
  * @version 0.1
  * @date 2023-11-08
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include <mooncake.h>
 #include "../hal_rachel.h"
 #include <Arduino.h>
 #include "../hal_config.h"
 
-
 void HAL_Rachel::_imu_init()
 {
     spdlog::info("imu init");
     HAL_LOG_INFO("imu init");
-    
+
     _imu = new m5::IMU_Class();
     if (!_imu->begin(_i2c_bus))
     {
         spdlog::error("imu init failed!");
         HAL_LOG_ERROR("imu init failed!");
     }
-        
 
     // // Test
     // while (1)
@@ -40,7 +38,6 @@ void HAL_Rachel::_imu_init()
     //     delay(50);
     // }
 }
-
 
 void HAL_Rachel::updateImuData()
 {

@@ -1,32 +1,22 @@
 /**
  * @file page_index.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-18
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include "../app_settings.h"
 #include "../../utils/system/ui/ui.h"
 
-
 using namespace MOONCAKE::APPS;
 using namespace SYSTEM::UI;
 
-
 void AppSettings::_page_index()
 {
-    std::vector<std::string> items = {
-        "[SETTINGS]",
-        "Power",
-        "Display",
-        "Sound",
-        "Time",
-        "About",
-        "Quit"
-    };
+    std::vector<std::string> items = {"[SETTINGS]", "Power", "Display", "Sound", "Time", "About", "Quit"};
 
     while (1)
     {

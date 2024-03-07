@@ -46,31 +46,25 @@
 #include "esp_system.h"
 #endif
 
-#define  NES_CLOCK_DIVIDER    12
+#define NES_CLOCK_DIVIDER 12
 //#define  NES_MASTER_CLOCK     21477272.727272727272
-#define  NES_MASTER_CLOCK     (236250000 / 11)
-#define  NES_SCANLINE_CYCLES  (1364.0 / NES_CLOCK_DIVIDER)
-#define  NES_FIQ_PERIOD       (NES_MASTER_CLOCK / NES_CLOCK_DIVIDER / 60)
+#define NES_MASTER_CLOCK (236250000 / 11)
+#define NES_SCANLINE_CYCLES (1364.0 / NES_CLOCK_DIVIDER)
+#define NES_FIQ_PERIOD (NES_MASTER_CLOCK / NES_CLOCK_DIVIDER / 60)
 
-#define  NES_RAMSIZE          0x800
+#define NES_RAMSIZE 0x800
 
-#define  NES_SKIP_LIMIT       (NES_REFRESH_RATE / 5)   /* 12 or 10, depending on PAL/NTSC */
+#define NES_SKIP_LIMIT (NES_REFRESH_RATE / 5) /* 12 or 10, depending on PAL/NTSC */
 
 static nes_t nes;
 
 /* find out if a file is ours */
-int nes_isourfile(const char *filename)
-{
-    return rom_checkmagic(filename);
-}
+int nes_isourfile(const char* filename) { return rom_checkmagic(filename); }
 
 /* TODO: just asking for problems -- please remove */
-nes_t *nes_getcontextptr(void)
-{
-    return &nes;
-}
+nes_t* nes_getcontextptr(void) { return &nes; }
 
-void nes_getcontext(nes_t *machine)
+void nes_getcontext(nes_t* machine)
 {
     apu_getcontext(nes.apu);
     ppu_getcontext(nes.ppu);
@@ -80,7 +74,7 @@ void nes_getcontext(nes_t *machine)
     *machine = nes;
 }
 
-void nes_setcontext(nes_t *machine)
+void nes_setcontext(nes_t* machine)
 {
     ASSERT(machine);
 
@@ -92,15 +86,9 @@ void nes_setcontext(nes_t *machine)
     nes = *machine;
 }
 
-static uint8 ram_read(uint32 address)
-{
-    return nes.cpu->mem_page[0][address & (NES_RAMSIZE - 1)];
-}
+static uint8 ram_read(uint32 address) { return nes.cpu->mem_page[0][address & (NES_RAMSIZE - 1)]; }
 
-static void ram_write(uint32 address, uint8 value)
-{
-    nes.cpu->mem_page[0][address & (NES_RAMSIZE - 1)] = value;
-}
+static void ram_write(uint32 address, uint8 value) { nes.cpu->mem_page[0][address & (NES_RAMSIZE - 1)] = value; }
 
 static void write_protect(uint32 address, uint8 value)
 {
@@ -117,32 +105,29 @@ static uint8 read_protect(uint32 address)
     return 0xFF;
 }
 
-#define  LAST_MEMORY_HANDLER  { -1, -1, NULL }
+#define LAST_MEMORY_HANDLER                                                                                                    \
+    {                                                                                                                          \
+        -1, -1, NULL                                                                                                           \
+    }
 /* read/write handlers for standard NES */
-static nes6502_memread default_readhandler[] =
-{
-    { 0x0800, 0x1FFF, ram_read },
-    { 0x2000, 0x3FFF, ppu_read },
-    { 0x4000, 0x4015, apu_read },
-    { 0x4016, 0x4017, ppu_readhigh },
-    LAST_MEMORY_HANDLER
-};
+static nes6502_memread default_readhandler[] = {{0x0800, 0x1FFF, ram_read},
+                                                {0x2000, 0x3FFF, ppu_read},
+                                                {0x4000, 0x4015, apu_read},
+                                                {0x4016, 0x4017, ppu_readhigh},
+                                                LAST_MEMORY_HANDLER};
 
-static nes6502_memwrite default_writehandler[] =
-{
-    { 0x0800, 0x1FFF, ram_write },
-    { 0x2000, 0x3FFF, ppu_write },
-    { 0x4000, 0x4013, apu_write },
-    { 0x4015, 0x4015, apu_write },
-    { 0x4014, 0x4017, ppu_writehigh },
-    LAST_MEMORY_HANDLER
-};
+static nes6502_memwrite default_writehandler[] = {{0x0800, 0x1FFF, ram_write},
+                                                  {0x2000, 0x3FFF, ppu_write},
+                                                  {0x4000, 0x4013, apu_write},
+                                                  {0x4015, 0x4015, apu_write},
+                                                  {0x4014, 0x4017, ppu_writehigh},
+                                                  LAST_MEMORY_HANDLER};
 
 /* this big nasty boy sets up the address handlers that the CPU uses */
-static void build_address_handlers(nes_t *machine)
+static void build_address_handlers(nes_t* machine)
 {
     int count, num_handlers = 0;
-    mapintf_t *intf;
+    mapintf_t* intf;
 
     ASSERT(machine);
     intf = machine->mmc->intf;
@@ -155,8 +140,7 @@ static void build_address_handlers(nes_t *machine)
         if (NULL == default_readhandler[count].read_func)
             break;
 
-        memcpy(&machine->readhandler[num_handlers], &default_readhandler[count],
-               sizeof(nes6502_memread));
+        memcpy(&machine->readhandler[num_handlers], &default_readhandler[count], sizeof(nes6502_memread));
     }
 
     if (intf->sound_ext)
@@ -168,8 +152,7 @@ static void build_address_handlers(nes_t *machine)
                 if (NULL == intf->sound_ext->mem_read[count].read_func)
                     break;
 
-                memcpy(&machine->readhandler[num_handlers], &intf->sound_ext->mem_read[count],
-                       sizeof(nes6502_memread));
+                memcpy(&machine->readhandler[num_handlers], &intf->sound_ext->mem_read[count], sizeof(nes6502_memread));
             }
         }
     }
@@ -181,8 +164,7 @@ static void build_address_handlers(nes_t *machine)
             if (NULL == intf->mem_read[count].read_func)
                 break;
 
-            memcpy(&machine->readhandler[num_handlers], &intf->mem_read[count],
-                   sizeof(nes6502_memread));
+            memcpy(&machine->readhandler[num_handlers], &intf->mem_read[count], sizeof(nes6502_memread));
         }
     }
 
@@ -204,8 +186,7 @@ static void build_address_handlers(nes_t *machine)
         if (NULL == default_writehandler[count].write_func)
             break;
 
-        memcpy(&machine->writehandler[num_handlers], &default_writehandler[count],
-               sizeof(nes6502_memwrite));
+        memcpy(&machine->writehandler[num_handlers], &default_writehandler[count], sizeof(nes6502_memwrite));
     }
 
     if (intf->sound_ext)
@@ -217,8 +198,7 @@ static void build_address_handlers(nes_t *machine)
                 if (NULL == intf->sound_ext->mem_write[count].write_func)
                     break;
 
-                memcpy(&machine->writehandler[num_handlers], &intf->sound_ext->mem_write[count],
-                       sizeof(nes6502_memwrite));
+                memcpy(&machine->writehandler[num_handlers], &intf->sound_ext->mem_write[count], sizeof(nes6502_memwrite));
             }
         }
     }
@@ -230,8 +210,7 @@ static void build_address_handlers(nes_t *machine)
             if (NULL == intf->mem_write[count].write_func)
                 break;
 
-            memcpy(&machine->writehandler[num_handlers], &intf->mem_write[count],
-                   sizeof(nes6502_memwrite));
+            memcpy(&machine->writehandler[num_handlers], &intf->mem_write[count], sizeof(nes6502_memwrite));
         }
     }
 
@@ -277,7 +256,7 @@ static uint8 nes_clearfiq(void)
 void nes_setfiq(uint8 value)
 {
     nes.fiq_state = value;
-    nes.fiq_cycles = (int) NES_FIQ_PERIOD;
+    nes.fiq_cycles = (int)NES_FIQ_PERIOD;
 }
 
 static void nes_checkfiq(int cycles)
@@ -285,7 +264,7 @@ static void nes_checkfiq(int cycles)
     nes.fiq_cycles -= cycles;
     if (nes.fiq_cycles <= 0)
     {
-        nes.fiq_cycles += (int) NES_FIQ_PERIOD;
+        nes.fiq_cycles += (int)NES_FIQ_PERIOD;
         if (0 == (nes.fiq_state & 0xC0))
         {
             nes.fiq_occurred = true;
@@ -294,15 +273,12 @@ static void nes_checkfiq(int cycles)
     }
 }
 
-void nes_nmi(void)
-{
-    nes6502_nmi();
-}
+void nes_nmi(void) { nes6502_nmi(); }
 
 static void nes_renderframe(bool draw_flag)
 {
     int elapsed_cycles;
-    mapintf_t *mapintf = nes.mmc->intf;
+    mapintf_t* mapintf = nes.mmc->intf;
     int in_vblank = 0;
 
     while (262 != nes.scanline)
@@ -326,9 +302,9 @@ static void nes_renderframe(bool draw_flag)
         if (mapintf->hblank)
             mapintf->hblank(in_vblank);
 
-        nes.scanline_cycles += (float) NES_SCANLINE_CYCLES;
-        elapsed_cycles = nes6502_execute((int) nes.scanline_cycles);
-        nes.scanline_cycles -= (float) elapsed_cycles;
+        nes.scanline_cycles += (float)NES_SCANLINE_CYCLES;
+        elapsed_cycles = nes6502_execute((int)nes.scanline_cycles);
+        nes.scanline_cycles -= (float)elapsed_cycles;
         nes_checkfiq(elapsed_cycles);
 
         ppu_endscanline(nes.scanline);
@@ -343,16 +319,15 @@ static void system_video(bool draw)
     /* TODO: hack */
     if (false == draw)
     {
-        //gui_frame(false);
+        // gui_frame(false);
         return;
     }
 
     /* blit the NES screen to our video surface */
-    vid_blit(nes.vidbuf, 0, (NES_SCREEN_HEIGHT - NES_VISIBLE_HEIGHT) / 2,
-             0, 0, NES_SCREEN_WIDTH, NES_VISIBLE_HEIGHT);
+    vid_blit(nes.vidbuf, 0, (NES_SCREEN_HEIGHT - NES_VISIBLE_HEIGHT) / 2, 0, 0, NES_SCREEN_WIDTH, NES_VISIBLE_HEIGHT);
 
     /* overlay our GUI on top of it */
-    //gui_frame(true);
+    // gui_frame(true);
 
     /* blit to screen */
     vid_flush();
@@ -375,14 +350,13 @@ void nes_emulate(void)
     last_ticks = nofrendo_ticks;
     frames_to_render = 0;
     nes.scanline_cycles = 0;
-    nes.fiq_cycles = (int) NES_FIQ_PERIOD;
+    nes.fiq_cycles = (int)NES_FIQ_PERIOD;
 
     uint startTime;
     uint stopTime;
     uint totalElapsedTime = 0;
     int frame = 0;
     int skipFrame = 0;
-
 
     for (int i = 0; i < 4; ++i)
     {
@@ -411,7 +385,8 @@ void nes_emulate(void)
         nes_renderframe(renderFrame);
         system_video(renderFrame);
 
-        if (skipFrame % 7 == 0) ++skipFrame;
+        if (skipFrame % 7 == 0)
+            ++skipFrame;
         ++skipFrame;
 
         do_audio_frame();
@@ -442,12 +417,12 @@ void nes_emulate(void)
 #endif
 }
 
-static void mem_trash(uint8 *buffer, int length)
+static void mem_trash(uint8* buffer, int length)
 {
     int i;
 
     for (i = 0; i < length; i++)
-        buffer[i] = (uint8) rand();
+        buffer[i] = (uint8)rand();
 }
 
 /* Reset NES hardware */
@@ -467,11 +442,10 @@ void nes_reset(int reset_type)
 
     nes.scanline = 241;
 
-    gui_sendmsg(GUI_GREEN, "NES %s",
-                (HARD_RESET == reset_type) ? "powered on" : "reset");
+    gui_sendmsg(GUI_GREEN, "NES %s", (HARD_RESET == reset_type) ? "powered on" : "reset");
 }
 
-void nes_destroy(nes_t **machine)
+void nes_destroy(nes_t** machine)
 {
     if (*machine)
     {
@@ -492,18 +466,12 @@ void nes_destroy(nes_t **machine)
     }
 }
 
-void nes_poweroff(void)
-{
-    nes.poweroff = true;
-}
+void nes_poweroff(void) { nes.poweroff = true; }
 
-void nes_togglepause(void)
-{
-    nes.pause ^= true;
-}
+void nes_togglepause(void) { nes.pause ^= true; }
 
 /* insert a cart into the NES */
-int nes_insertcart(const char *filename, nes_t *machine)
+int nes_insertcart(const char* filename, nes_t* machine)
 {
     nes6502_setcontext(machine->cpu);
 
@@ -519,7 +487,6 @@ int nes_insertcart(const char *filename, nes_t *machine)
         machine->cpu->mem_page[7] = machine->rominfo->sram + 0x1000;
     }
 
-
     /* mapper */
     machine->mmc = mmc_create(machine->rominfo);
     if (NULL == machine->mmc)
@@ -533,7 +500,6 @@ int nes_insertcart(const char *filename, nes_t *machine)
 
     build_address_handlers(machine);
 
-
     nes_setcontext(machine);
 
     nes_reset(HARD_RESET);
@@ -545,11 +511,10 @@ _fail:
     return -1;
 }
 
-
 /* Initialize NES CPU, hardware, etc. */
-nes_t *nes_create(void)
+nes_t* nes_create(void)
 {
-    nes_t *machine;
+    nes_t* machine;
     sndinfo_t osd_sound;
     int i;
 

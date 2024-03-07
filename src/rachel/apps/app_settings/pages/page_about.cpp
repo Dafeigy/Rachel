@@ -1,20 +1,18 @@
 /**
  * @file page_about.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-18
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include "../app_settings.h"
 #include "../../../hal/hal.h"
 #include "../assets/page_about_png.hpp"
 
-
 using namespace MOONCAKE::APPS;
-
 
 void AppSettings::_page_about()
 {

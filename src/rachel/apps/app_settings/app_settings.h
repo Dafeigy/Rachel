@@ -1,24 +1,23 @@
 /**
  * @file app_settings.h
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-04
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include <mooncake.h>
 #include "assets/icon_app_settings.hpp"
 #include "../../utils/system/ui/ui.h"
 
-
 namespace MOONCAKE::APPS
 {
     /**
-    * @brief Settings 
-    *
-    */
+     * @brief Settings
+     *
+     */
     class AppSettings : public APP_BASE
     {
     private:
@@ -47,6 +46,6 @@ namespace MOONCAKE::APPS
         std::string getAppName() override { return "Settings"; }
         void* getAppIcon() override { return (void*)image_data_icon_app_settings; }
         void* newApp() override { return new AppSettings; }
-        void deleteApp(void *app) override { delete (AppSettings*)app; }
+        void deleteApp(void* app) override { delete (AppSettings*)app; }
     };
-}
+} // namespace MOONCAKE::APPS

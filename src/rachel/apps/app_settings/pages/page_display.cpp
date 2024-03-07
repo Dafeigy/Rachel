@@ -1,12 +1,12 @@
 /**
  * @file page_display.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-18
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include "../app_settings.h"
 #include "../../utils/system/ui/ui.h"
@@ -16,15 +16,13 @@
 #include <cstdint>
 #include <string>
 
-
 using namespace MOONCAKE::APPS;
 using namespace SYSTEM::UI;
 using namespace SYSTEM::INPUTS;
 
-
 static void _handle_brightness_config()
 {
-    // 15~255 16/step 
+    // 15~255 16/step
     int brightness = HAL::GetDisplay()->getBrightness();
     bool is_changed = true;
 
@@ -35,16 +33,16 @@ static void _handle_brightness_config()
     std::string title;
     while (1)
     {
-        // Render brightness bar 
+        // Render brightness bar
         if (is_changed)
         {
             is_changed = false;
 
-            // Apply change 
+            // Apply change
             HAL::GetSystemConfig().brightness = brightness;
             HAL::GetDisplay()->setBrightness(HAL::GetSystemConfig().brightness);
 
-            // Render brightness setting bar 
+            // Render brightness setting bar
             title = "Brightness " + std::to_string(brightness);
             ProgressWindow(title, brightness * 100 / 255);
             HAL::CanvasUpdate();
@@ -54,7 +52,7 @@ static void _handle_brightness_config()
             HAL::Delay(20);
         }
 
-        // Read input 
+        // Read input
         if (btn_left.pressed())
         {
             brightness -= 16;
@@ -76,20 +74,19 @@ static void _handle_brightness_config()
     }
 }
 
-
 void AppSettings::_page_display()
 {
     while (1)
     {
-        std::vector<std::string> items = { "[DISPLAY]" };
+        std::vector<std::string> items = {"[DISPLAY]"};
 
-        // Get button sound config 
+        // Get button sound config
         items.push_back("Brightness     " + std::to_string(HAL::GetSystemConfig().brightness));
         items.push_back("Back");
 
         auto selected = _data.select_menu->waitResult(items);
 
-        // Brightness 
+        // Brightness
         if (selected == 1)
         {
             _handle_brightness_config();

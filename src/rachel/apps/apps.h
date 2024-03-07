@@ -1,12 +1,12 @@
 /**
  * @file apps.h
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-04
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #pragma once
 #include "launcher/launcher.h"
@@ -19,7 +19,6 @@
 #include "app_ble_gamepad/app_ble_gamepad.h"
 #include "app_nofrendo/app_nofrendo.h"
 /* Header files locator(Don't remove) */
-
 
 void rachel_app_install_callback(MOONCAKE::Mooncake* mooncake)
 {

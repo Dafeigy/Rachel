@@ -1,18 +1,18 @@
 /**
  * @file rachel.h
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-04
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #pragma once
 
-namespace RACHEL 
+namespace RACHEL
 {
     void Setup();
     void Loop();
     void Destroy();
-}
+} // namespace RACHEL

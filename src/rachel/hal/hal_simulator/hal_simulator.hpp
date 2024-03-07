@@ -1,12 +1,12 @@
 /**
  * @file hal_simulator.hpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-04
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #pragma once
 #ifndef ESP_PLATFORM
@@ -19,18 +19,15 @@
 #include "../hal.h"
 #include "../../../performance_window.hpp"
 
-
 // PerformanceWindow _pw;
-
 
 class HAL_Simulator : public HAL
 {
     std::string type() override { return "Simulator"; }
 
-
     void init() override
     {
-        // Display 
+        // Display
         _display = new LGFX(240, 240);
         _display->init();
 
@@ -38,20 +35,18 @@ class HAL_Simulator : public HAL
         _canvas = new LGFX_SpriteFx(_display);
         _canvas->createSprite(_display->width(), _display->height());
 
-        // // Some pc window pop up slower? 
+        // // Some pc window pop up slower?
         // lgfx::delay(1500);
 
         // this->popFatalError("啊?");
         // this->popFatalError("原神启动失败(悲)");
     }
 
-
     void canvasUpdate() override
     {
         GetCanvas()->pushSprite(0, 0);
         // _pw.update();
     }
-
 
     void loadTextFont24() override
     {
@@ -62,13 +57,11 @@ class HAL_Simulator : public HAL
         _canvas->setTextSize(1);
     }
 
-
     void loadTextFont16() override
     {
         _canvas->setFont(&fonts::efontCN_16);
         _canvas->setTextSize(1);
     }
-
 
     void loadLauncherFont24() override
     {
@@ -76,7 +69,6 @@ class HAL_Simulator : public HAL
         _canvas->setFont(&fonts::efontCN_24);
         _canvas->setTextSize(1);
     }
-
 
     bool getButton(GAMEPAD::GamePadButton_t button) override
     {

@@ -1,12 +1,12 @@
 /**
  * @file app_genshin.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-04
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include "app_genshin.h"
 #include "spdlog/spdlog.h"
@@ -14,30 +14,19 @@
 #include "../assets/theme/theme.h"
 #include "../utils/system/ui/ui.h"
 
-
 using namespace MOONCAKE::APPS;
 
+void AppGenshin::onCreate() { spdlog::info("{} onCreate", getAppName()); }
 
-void AppGenshin::onCreate()
-{
-    spdlog::info("{} onCreate", getAppName());
-}
-
-
-void AppGenshin::onResume()
-{
-    spdlog::info("{} onResume", getAppName());
-}
-
+void AppGenshin::onResume() { spdlog::info("{} onResume", getAppName()); }
 
 using namespace SYSTEM::UI;
-
 
 void AppGenshin::onRunning()
 {
     HAL::LoadTextFont24();
 
-    // // Loading 
+    // // Loading
     // std::vector<std::string> title_list = {"传送松山湖..", "打捞..", "CPU热拔插.."};
     // for (auto& title : title_list)
     // {
@@ -49,7 +38,7 @@ void AppGenshin::onRunning()
     //     }
     // }
 
-    // Launch 
+    // Launch
     HAL::GetCanvas()->fillScreen(THEME_COLOR_LIGHT);
     HAL::CanvasUpdate();
     HAL::Delay(2000);
@@ -85,12 +74,7 @@ void AppGenshin::onRunning()
 
     HAL::PopFatalError("你在期待什么? O.o");
 
-
     destroyApp();
 }
 
-
-void AppGenshin::onDestroy()
-{
-    spdlog::info("{} onDestroy", getAppName());
-}
+void AppGenshin::onDestroy() { spdlog::info("{} onDestroy", getAppName()); }

@@ -1,41 +1,34 @@
 /**
  * @file select_menu.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-10
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include "select_menu.h"
 #include "../../../../../hal/hal.h"
 #include "components/render_callbacks.h"
 
-
 using namespace SYSTEM::UI;
-
 
 void SelectMenu::_create_menu(std::vector<std::string>& itemList)
 {
-    // Create menu 
-    _data.menu = new SMOOTH_MENU::Simple_Menu(HAL::GetCanvas()->width(), HAL::GetCanvas()->height());    
+    // Create menu
+    _data.menu = new SMOOTH_MENU::Simple_Menu(HAL::GetCanvas()->width(), HAL::GetCanvas()->height());
 
-    // Push items into menu 
+    // Push items into menu
     int text_width = 12;
     int text_height = 24;
-    for (int i = 0; i < itemList.size(); i++) 
+    for (int i = 0; i < itemList.size(); i++)
     {
         _data.menu->getMenu()->addItem(
-            itemList[i].c_str(),
-            10,
-            10 + (text_height + 5) * i,
-            text_width * itemList[i].size(),
-            text_height
-        );
+            itemList[i].c_str(), 10, 10 + (text_height + 5) * i, text_width * itemList[i].size(), text_height);
     }
 
-    // Set render callback 
+    // Set render callback
     if (_config.items_alignment == ALIGN_LEFT)
         _data.render_cb = new SelectMenuRenderCb_AlignLeft;
     else if (_config.items_alignment == ALIGN_CENTER)
@@ -48,20 +41,18 @@ void SelectMenu::_create_menu(std::vector<std::string>& itemList)
     _data.menu->setRenderCallback(_data.render_cb);
 }
 
-
 void SelectMenu::_destroy_menu()
 {
     delete _data.menu;
     delete _data.render_cb;
 }
 
-
 void SelectMenu::_load_config()
 {
-    // Load font 
+    // Load font
     HAL::LoadLauncherFont24();
 
-    // Configs 
+    // Configs
     _data.menu->setFirstItem(_config.first_item);
     _data.menu->setMenuLoopMode(_config.selector_can_go_loop);
     {
@@ -84,7 +75,6 @@ void SelectMenu::_load_config()
     }
 }
 
-
 int SelectMenu::waitResult(std::vector<std::string>& itemList)
 {
     _create_menu(itemList);
@@ -94,7 +84,7 @@ int SelectMenu::waitResult(std::vector<std::string>& itemList)
     {
         if ((HAL::Millis() - _data.menu_update_count) > _config.menu_update_interval)
         {
-            // Update navigation 
+            // Update navigation
             if (HAL::GetButton(GAMEPAD::BTN_UP) || HAL::GetButton(GAMEPAD::BTN_LEFT))
             {
                 if (!_data.menu_wait_button_released)
@@ -112,11 +102,11 @@ int SelectMenu::waitResult(std::vector<std::string>& itemList)
                 }
             }
 
-            // If select 
+            // If select
             else if (HAL::GetButton(GAMEPAD::BTN_A) || HAL::GetButton(GAMEPAD::BTN_LEFT_STICK))
             {
                 _data.menu->getSelector()->pressed();
-                // Wait release 
+                // Wait release
                 while (HAL::GetButton(GAMEPAD::BTN_A) || HAL::GetButton(GAMEPAD::BTN_LEFT_STICK))
                 {
                     _data.menu->update(HAL::Millis());
@@ -124,14 +114,14 @@ int SelectMenu::waitResult(std::vector<std::string>& itemList)
                 }
                 _data.menu->getSelector()->released();
 
-                // Wait anim finish 
+                // Wait anim finish
                 while (!_data.menu->getSelector()->isAnimFinished())
                 {
                     _data.menu->update(HAL::Millis());
                     HAL::CanvasUpdate();
                 }
 
-                // If not title 
+                // If not title
                 if (_data.menu->getSelector()->getTargetItem() != 0)
                 {
                     int selected_index = _data.menu->getSelector()->getTargetItem();
@@ -140,22 +130,21 @@ int SelectMenu::waitResult(std::vector<std::string>& itemList)
                 }
             }
 
-            // Unlock if no button is pressing 
+            // Unlock if no button is pressing
             else
             {
                 _data.menu_wait_button_released = false;
             }
 
-            // Render and push frame  
+            // Render and push frame
             _data.menu->update(HAL::Millis());
             HAL::CanvasUpdate();
 
             _data.menu_update_count = HAL::Millis();
         }
-        else 
+        else
         {
             HAL::Delay(5);
         }
     }
 }
-

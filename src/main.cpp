@@ -1,23 +1,15 @@
 /**
  * @file main.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-07
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include "rachel/rachel.h"
 
+void setup() { RACHEL::Setup(); }
 
-void setup()
-{
-    RACHEL::Setup();
-}
-
-
-void loop()
-{
-    RACHEL::Loop();
-}
+void loop() { RACHEL::Loop(); }

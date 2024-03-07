@@ -1,31 +1,21 @@
 /**
  * @file hal.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-04
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include <mooncake.h>
 #include "hal.h"
 
-
 HAL* HAL::_hal = nullptr;
 
+HAL* HAL::Get() { return _hal; }
 
-HAL* HAL::Get()
-{
-    return _hal;
-}
-
-
-bool HAL::Check()
-{
-    return _hal != nullptr;
-}
-
+bool HAL::Check() { return _hal != nullptr; }
 
 bool HAL::Inject(HAL* hal)
 {
@@ -49,9 +39,8 @@ bool HAL::Inject(HAL* hal)
     return true;
 }
 
-
 void HAL::Destroy()
-{   
+{
     if (_hal == nullptr)
     {
         spdlog::error("HAL not exist");
@@ -61,7 +50,6 @@ void HAL::Destroy()
     delete _hal;
     _hal = nullptr;
 }
-
 
 void HAL::renderFpsPanel()
 {
@@ -74,15 +62,14 @@ void HAL::renderFpsPanel()
     time_count = millis();
 }
 
-
 void HAL::popFatalError(std::string msg)
 {
     static const uint32_t bg_color = 0x0078d7;
-    
+
     loadTextFont24();
     _canvas->setTextColor(TFT_WHITE, bg_color);
     _canvas->fillScreen(bg_color);
-    
+
     _canvas->setCursor(8, 15);
     _canvas->setTextSize(5);
     _canvas->printf(":(");
@@ -95,8 +82,7 @@ void HAL::popFatalError(std::string msg)
 
     _canvas->pushSprite(0, 0);
 
-
-    // Press any button to poweroff 
+    // Press any button to poweroff
     while (1)
     {
         delay(100);
@@ -105,14 +91,12 @@ void HAL::popFatalError(std::string msg)
     }
 }
 
-
-// Cpp sucks 
+// Cpp sucks
 tm* HAL::getLocalTime()
 {
     time(&_time_buffer);
     return localtime(&_time_buffer);
 }
-
 
 bool HAL::getAnyButton()
 {
@@ -124,10 +108,9 @@ bool HAL::getAnyButton()
     return false;
 }
 
-
 void HAL::updateSystemFromConfig()
 {
-    // Brightness 
+    // Brightness
     _display->setBrightness(_config.brightness);
 
     // Volume

@@ -1,32 +1,26 @@
 /**
  * @file app_template.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-04
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include "app_template.h"
 #include "spdlog/spdlog.h"
 #include "../../hal/hal.h"
 #include "../assets/theme/theme.h"
 
-
 using namespace MOONCAKE::APPS;
 
-
 // Like setup()...
-void AppTemplate::onResume()
-{
-    spdlog::info("{} onResume", getAppName());
-}
-
+void AppTemplate::onResume() { spdlog::info("{} onResume", getAppName()); }
 
 // Like loop()...
 void AppTemplate::onRunning()
-{    
+{
     spdlog::info("咩啊");
     HAL::Delay(1000);
 
@@ -35,8 +29,4 @@ void AppTemplate::onRunning()
         destroyApp();
 }
 
-
-void AppTemplate::onDestroy()
-{
-    spdlog::info("{} onDestroy", getAppName());
-}
+void AppTemplate::onDestroy() { spdlog::info("{} onDestroy", getAppName()); }

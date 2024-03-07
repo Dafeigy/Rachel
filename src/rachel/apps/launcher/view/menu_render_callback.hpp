@@ -1,12 +1,12 @@
 /**
  * @file menu_render_callback.hpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-05
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #pragma once
 #include "../../../hal/hal.h"
@@ -15,7 +15,6 @@
 #include "../assets/launcher_bottom_panel.hpp"
 #include <cmath>
 #include <string>
-
 
 class LauncherRenderCallBack : public SMOOTH_MENU::SimpleMenuCallback_t
 {
@@ -26,42 +25,31 @@ private:
     std::string* _clock;
 
 public:
-    LauncherRenderCallBack() :
-        _x_offset(0),
-        _y_offset(0),
-        _anim_value_buffer(0),
-        _clock(nullptr)
-        {}
+    LauncherRenderCallBack() : _x_offset(0), _y_offset(0), _anim_value_buffer(0), _clock(nullptr) {}
 
     LVGL::Anim_Path statusBarAnim;
     LVGL::Anim_Path bottomPanelAnim;
     inline void setClock(std::string* clock) { _clock = clock; }
 
     /* Override render callback */
-    void renderCallback(
-        const std::vector<SMOOTH_MENU::Item_t*>& menuItemList,
-        const SMOOTH_MENU::RenderAttribute_t& selector,
-        const SMOOTH_MENU::RenderAttribute_t& camera
-    ) override
+    void renderCallback(const std::vector<SMOOTH_MENU::Item_t*>& menuItemList,
+                        const SMOOTH_MENU::RenderAttribute_t& selector,
+                        const SMOOTH_MENU::RenderAttribute_t& camera) override
     {
-        // Clear 
+        // Clear
         HAL::GetCanvas()->fillScreen(THEME_COLOR_DARK);
 
-
-
-        // Render status bar 
+        // Render status bar
         /* --------------------------------------------------------------------------------------------- */
         // HAL::GetCanvas()->fillRect(0, 0, 240, 24, THEME_COLOR_LIGHT);
 
-        // With anim 
+        // With anim
         _anim_value_buffer = statusBarAnim.getValue(HAL::Millis());
         HAL::GetCanvas()->fillRect(0, 0, 240, _anim_value_buffer, THEME_COLOR_LIGHT);
         HAL::GetCanvas()->setTextSize(2);
         HAL::GetCanvas()->drawCenterString(_clock->c_str(), 120, _anim_value_buffer - 19, &fonts::Font0);
         HAL::GetCanvas()->setTextSize(1);
         /* --------------------------------------------------------------------------------------------- */
-        
-
 
         // Render bottom panel
         /* --------------------------------------------------------------------------------------------- */
@@ -72,8 +60,6 @@ public:
         HAL::GetCanvas()->pushImage(0, _anim_value_buffer, 240, 82, image_data_launcher_bottom_panel);
         /* --------------------------------------------------------------------------------------------- */
 
-
-
         // Render items (Icons)
         /* --------------------------------------------------------------------------------------------- */
         // Get x offset (fixed selector, icon moves)
@@ -81,35 +67,29 @@ public:
 
         for (const auto& item : menuItemList)
         {
-            // Get y offset, lower the unselected one 
+            // Get y offset, lower the unselected one
             _y_offset = std::abs(selector.x - item->x) / 3;
 
             // Render icon
-            HAL::GetCanvas()->pushImage(
-                item->x + _x_offset, 
-                item->y + _y_offset,
-                THEME_APP_ICON_WIDTH, 
-                THEME_APP_ICON_HEIGHT, 
-                (const uint16_t*)(item->userData)
-            );
+            HAL::GetCanvas()->pushImage(item->x + _x_offset,
+                                        item->y + _y_offset,
+                                        THEME_APP_ICON_WIDTH,
+                                        THEME_APP_ICON_HEIGHT,
+                                        (const uint16_t*)(item->userData));
 
-            // If is the selected one 
+            // If is the selected one
             if (item->id == selector.targetItem)
             {
                 // Render app name
                 HAL::GetCanvas()->setTextColor(THEME_COLOR_DARK, THEME_COLOR_LIGHT);
                 // HAL::GetCanvas()->drawCenterString(
-                //     item->tag.c_str(), 
-                //     120, 
+                //     item->tag.c_str(),
+                //     120,
                 //     THEME_APP_NAME_MARGIN_TOP
                 // );
 
-                // With anim 
-                HAL::GetCanvas()->drawCenterString(
-                    item->tag.c_str(), 
-                    120, 
-                    _anim_value_buffer + 15
-                );
+                // With anim
+                HAL::GetCanvas()->drawCenterString(item->tag.c_str(), 120, _anim_value_buffer + 15);
             }
         }
         /* --------------------------------------------------------------------------------------------- */

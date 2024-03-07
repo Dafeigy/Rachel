@@ -3,14 +3,14 @@
 **
 **
 ** This program is free software; you can redistribute it and/or
-** modify it under the terms of version 2 of the GNU Library General 
+** modify it under the terms of version 2 of the GNU Library General
 ** Public License as published by the Free Software Foundation.
 **
-** This program is distributed in the hope that it will be useful, 
+** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU 
-** Library General Public License for more details.  To obtain a 
-** copy of the GNU Library General Public License, write to the Free 
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Library General Public License for more details.  To obtain a
+** copy of the GNU Library General Public License, write to the Free
 ** Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **
 ** Any permitted reproduction of these routines, in whole or in part,
@@ -31,27 +31,27 @@
 /* a bitmap rectangle */
 typedef struct rect_s
 {
-   int16 x, y;
-   uint16 w, h;
+    int16 x, y;
+    uint16 w, h;
 } rect_t;
 
 typedef struct rgb_s
 {
-   int r, g, b;
+    int r, g, b;
 } rgb_t;
 
 typedef struct bitmap_s
 {
-   int width, height, pitch;
-   bool hardware;             /* is data a hardware region? */
-   uint8 *data;               /* protected */
-   uint8 *line[ZERO_LENGTH];  /* will hold line pointers */
+    int width, height, pitch;
+    bool hardware;            /* is data a hardware region? */
+    uint8* data;              /* protected */
+    uint8* line[ZERO_LENGTH]; /* will hold line pointers */
 } bitmap_t;
 
-extern void bmp_clear(const bitmap_t *bitmap, uint8 color);
-extern bitmap_t *bmp_create(int width, int height, int overdraw);
-extern bitmap_t *bmp_createhw(uint8 *addr, int width, int height, int pitch);
-extern void bmp_destroy(bitmap_t **bitmap);
+extern void bmp_clear(const bitmap_t* bitmap, uint8 color);
+extern bitmap_t* bmp_create(int width, int height, int overdraw);
+extern bitmap_t* bmp_createhw(uint8* addr, int width, int height, int pitch);
+extern void bmp_destroy(bitmap_t** bitmap);
 
 #endif /* _BITMAP_H_ */
 

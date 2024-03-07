@@ -3,14 +3,14 @@
 **
 **
 ** This program is free software; you can redistribute it and/or
-** modify it under the terms of version 2 of the GNU Library General 
+** modify it under the terms of version 2 of the GNU Library General
 ** Public License as published by the Free Software Foundation.
 **
-** This program is distributed in the hope that it will be useful, 
+** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU 
-** Library General Public License for more details.  To obtain a 
-** copy of the GNU Library General Public License, write to the Free 
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Library General Public License for more details.  To obtain a
+** copy of the GNU Library General Public License, write to the Free
 ** Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **
 ** Any permitted reproduction of these routines, in whole or in part,
@@ -30,10 +30,10 @@
 
 extern int log_init(void);
 extern void log_shutdown(void);
-extern int log_print(const char *string);
-extern int ___log_printf(const char *format, ...);
-extern void log_chain_logfunc(int (*logfunc)(const char *string));
-extern void log_assert(int expr, int line, const char *file, char *msg);
+extern int log_print(const char* string);
+extern int ___log_printf(const char* format, ...);
+extern void log_chain_logfunc(int (*logfunc)(const char* string));
+extern void log_assert(int expr, int line, const char* file, char* msg);
 
 #endif /* _LOG_H_ */
 

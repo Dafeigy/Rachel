@@ -1,12 +1,12 @@
 /**
  * @file launcher.h
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-04
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #pragma once
 #include <cstdint>
@@ -14,13 +14,12 @@
 #include <string>
 #include "../utils/smooth_menu/simple_menu/simple_menu.h"
 
-
 namespace MOONCAKE::APPS
 {
     /**
-    * @brief Launcher
-    *
-    */
+     * @brief Launcher
+     *
+     */
     class Launcher : public APP_BASE
     {
     private:
@@ -40,7 +39,7 @@ namespace MOONCAKE::APPS
             // const uint32_t menu_update_interval = 0;
             bool menu_wait_button_released = false;
 
-            // App open and close anim 
+            // App open and close anim
             LVGL::Anim_Path app_anim;
         };
         Data_t _data;
@@ -63,6 +62,6 @@ namespace MOONCAKE::APPS
     {
         std::string getAppName() override { return "Launcher"; }
         void* newApp() override { return new Launcher; }
-        void deleteApp(void *app) override { delete (Launcher*)app; }
+        void deleteApp(void* app) override { delete (Launcher*)app; }
     };
-}
+} // namespace MOONCAKE::APPS

@@ -1,12 +1,12 @@
 /**
  * @file select_menu.h
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-10
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #pragma once
 #include "../../../smooth_menu/simple_menu/simple_menu.h"
@@ -14,12 +14,11 @@
 #include <string>
 #include <vector>
 
-
 namespace SYSTEM::UI
 {
     /**
-     * @brief Select menu, 选择菜单 
-     * 
+     * @brief Select menu, 选择菜单
+     *
      */
     class SelectMenu
     {
@@ -48,7 +47,7 @@ namespace SYSTEM::UI
 
             ItemsAlignment_t items_alignment = ALIGN_LEFT;
         };
-        
+
     private:
         struct Data_t
         {
@@ -67,15 +66,18 @@ namespace SYSTEM::UI
         inline Config_t getConfig() { return _config; }
         inline void setConfig(Config_t cfg) { _config = cfg; }
         inline void setItemAlignment(ItemsAlignment_t alignment) { _config.items_alignment = alignment; }
-        
 
         /**
-         * @brief Render the menu and blocked untill item selected, 渲染一个菜单并等待选择 
-         * 
-         * @param itemList Items to be select, the first element will be "title", which will not be selected 
-         * @return int selected item index 
+         * @brief Render the menu and blocked untill item selected, 渲染一个菜单并等待选择
+         *
+         * @param itemList Items to be select, the first element will be "title", which will not be selected
+         * @return int selected item index
          */
         int waitResult(std::vector<std::string>& itemList);
-        inline int waitResult(std::vector<std::string>& itemList, ItemsAlignment_t alignment) { setItemAlignment(alignment); return waitResult(itemList); }
+        inline int waitResult(std::vector<std::string>& itemList, ItemsAlignment_t alignment)
+        {
+            setItemAlignment(alignment);
+            return waitResult(itemList);
+        }
     };
-}
+} // namespace SYSTEM::UI

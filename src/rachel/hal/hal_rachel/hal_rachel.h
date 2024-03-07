@@ -1,12 +1,12 @@
 /**
  * @file hal_rachel.h
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-07
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #pragma once
 #include "../hal.h"
@@ -14,7 +14,6 @@
 #include "utils/m5unified/RTC8563_Class.hpp"
 #include "utils/m5unified/IMU_Class.hpp"
 // #include "utils/m5unified/Speaker_Class.hpp"
-
 
 class HAL_Rachel : public HAL
 {
@@ -42,12 +41,10 @@ private:
     void _sum_up();
 
 public:
-    HAL_Rachel() :
-        _i2c_bus(nullptr),
-        _rtc(nullptr),
-        _imu(nullptr)
-        // _spk(nullptr)
-        {}
+    HAL_Rachel() : _i2c_bus(nullptr), _rtc(nullptr), _imu(nullptr)
+    // _spk(nullptr)
+    {
+    }
     ~HAL_Rachel()
     {
         delete _rtc;

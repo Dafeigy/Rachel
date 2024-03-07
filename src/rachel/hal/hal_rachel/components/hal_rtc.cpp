@@ -4,15 +4,14 @@
  * @brief Ref: https://github.com/m5stack/M5Unified
  * @version 0.1
  * @date 2023-11-07
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include <mooncake.h>
 #include "../hal_rachel.h"
 #include <Arduino.h>
 #include "../hal_config.h"
-
 
 void HAL_Rachel::_rtc_init()
 {
@@ -25,11 +24,10 @@ void HAL_Rachel::_rtc_init()
         spdlog::error("rtc init failed!");
         HAL_LOG_ERROR("rtc init failed!");
     }
-        
-    _adjust_sys_time();
-    
 
-    // // Test 
+    _adjust_sys_time();
+
+    // // Test
     // tm set_time;
     // set_time.tm_year = 2023;
     // set_time.tm_mon = 10;
@@ -59,19 +57,17 @@ void HAL_Rachel::_rtc_init()
     // }
 }
 
-
 void HAL_Rachel::setSystemTime(tm dateTime)
 {
     _rtc->setDateTime(dateTime);
     _adjust_sys_time();
 }
 
-
 void HAL_Rachel::_adjust_sys_time()
 {
     auto time = _rtc->getDateTime().get_tm();
     time_t tv_sec = mktime(&time);
-    struct timeval now = { .tv_sec = tv_sec };
+    struct timeval now = {.tv_sec = tv_sec};
     settimeofday(&now, NULL);
     spdlog::info("adjusted system time to rtc");
 }

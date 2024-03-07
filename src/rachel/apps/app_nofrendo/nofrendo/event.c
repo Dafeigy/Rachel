@@ -37,537 +37,474 @@
 #include <nesstate.h>
 
 /* pointer to our current system's event handler table */
-static event_t *system_events = NULL;
+static event_t* system_events = NULL;
 
 /* standard keyboard input */
-static nesinput_t kb_input = { INP_JOYPAD0, 0 };
-static nesinput_t kb_alt_input = { INP_JOYPAD1, 0 };
+static nesinput_t kb_input = {INP_JOYPAD0, 0};
+static nesinput_t kb_alt_input = {INP_JOYPAD1, 0};
 
 static void func_event_quit(int code)
 {
-   UNUSED(code);
-   main_quit();
+    UNUSED(code);
+    main_quit();
 }
 
 static void func_event_insert(int code)
 {
-   UNUSED(code);
-   /* TODO: after the GUI */
+    UNUSED(code);
+    /* TODO: after the GUI */
 }
 
 static void func_event_eject(int code)
 {
-   if (INP_STATE_MAKE == code)
-      main_eject();
+    if (INP_STATE_MAKE == code)
+        main_eject();
 }
 
 static void func_event_togglepause(int code)
 {
-   if (INP_STATE_MAKE == code)
-      nes_togglepause();
+    if (INP_STATE_MAKE == code)
+        nes_togglepause();
 }
 
 static void func_event_soft_reset(int code)
 {
-   if (INP_STATE_MAKE == code)
-      nes_reset(SOFT_RESET);
+    if (INP_STATE_MAKE == code)
+        nes_reset(SOFT_RESET);
 }
 
 static void func_event_hard_reset(int code)
 {
-   if (INP_STATE_MAKE == code)
-      nes_reset(HARD_RESET);
+    if (INP_STATE_MAKE == code)
+        nes_reset(HARD_RESET);
 }
 
 static void func_event_snapshot(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_savesnap();
+    if (INP_STATE_MAKE == code)
+        gui_savesnap();
 }
 
 static void func_event_toggle_frameskip(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_togglefs();
+    if (INP_STATE_MAKE == code)
+        gui_togglefs();
 }
 
 static void func_event_state_save(int code)
 {
-   // if (INP_STATE_MAKE == code)
-   //    state_save();
+    // if (INP_STATE_MAKE == code)
+    //    state_save();
 }
 
 static void func_event_state_load(int code)
 {
-   // if (INP_STATE_MAKE == code)
-   //    state_load();
+    // if (INP_STATE_MAKE == code)
+    //    state_load();
 }
 
 static void func_event_state_slot_0(int code)
 {
-   if (INP_STATE_MAKE == code)
-      state_setslot(0);
+    if (INP_STATE_MAKE == code)
+        state_setslot(0);
 }
 
 static void func_event_state_slot_1(int code)
 {
-   if (INP_STATE_MAKE == code)
-      state_setslot(1);
+    if (INP_STATE_MAKE == code)
+        state_setslot(1);
 }
 
 static void func_event_state_slot_2(int code)
 {
-   if (INP_STATE_MAKE == code)
-      state_setslot(2);
+    if (INP_STATE_MAKE == code)
+        state_setslot(2);
 }
 
 static void func_event_state_slot_3(int code)
 {
-   if (INP_STATE_MAKE == code)
-      state_setslot(3);
+    if (INP_STATE_MAKE == code)
+        state_setslot(3);
 }
 
 static void func_event_state_slot_4(int code)
 {
-   if (INP_STATE_MAKE == code)
-      state_setslot(4);
+    if (INP_STATE_MAKE == code)
+        state_setslot(4);
 }
 
 static void func_event_state_slot_5(int code)
 {
-   if (INP_STATE_MAKE == code)
-      state_setslot(5);
+    if (INP_STATE_MAKE == code)
+        state_setslot(5);
 }
 
 static void func_event_state_slot_6(int code)
 {
-   if (INP_STATE_MAKE == code)
-      state_setslot(6);
+    if (INP_STATE_MAKE == code)
+        state_setslot(6);
 }
 
 static void func_event_state_slot_7(int code)
 {
-   if (INP_STATE_MAKE == code)
-      state_setslot(7);
+    if (INP_STATE_MAKE == code)
+        state_setslot(7);
 }
 
 static void func_event_state_slot_8(int code)
 {
-   if (INP_STATE_MAKE == code)
-      state_setslot(8);
+    if (INP_STATE_MAKE == code)
+        state_setslot(8);
 }
 
 static void func_event_state_slot_9(int code)
 {
-   if (INP_STATE_MAKE == code)
-      state_setslot(9);
+    if (INP_STATE_MAKE == code)
+        state_setslot(9);
 }
 
 static void func_event_gui_toggle_oam(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_toggleoam();
+    if (INP_STATE_MAKE == code)
+        gui_toggleoam();
 }
 
 static void func_event_gui_toggle_wave(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_togglewave();
+    if (INP_STATE_MAKE == code)
+        gui_togglewave();
 }
 
 static void func_event_gui_toggle_pattern(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_togglepattern();
+    if (INP_STATE_MAKE == code)
+        gui_togglepattern();
 }
 
 static void func_event_gui_pattern_color_up(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_incpatterncol();
+    if (INP_STATE_MAKE == code)
+        gui_incpatterncol();
 }
 
 static void func_event_gui_pattern_color_down(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_decpatterncol();
+    if (INP_STATE_MAKE == code)
+        gui_decpatterncol();
 }
 
 static void func_event_gui_toggle_fps(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_togglefps();
+    if (INP_STATE_MAKE == code)
+        gui_togglefps();
 }
 
 static void func_event_gui_display_info(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_displayinfo();
+    if (INP_STATE_MAKE == code)
+        gui_displayinfo();
 }
 
 static void func_event_gui_toggle(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_togglegui();
+    if (INP_STATE_MAKE == code)
+        gui_togglegui();
 }
 
 static void func_event_toggle_channel_0(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_toggle_chan(0);
+    if (INP_STATE_MAKE == code)
+        gui_toggle_chan(0);
 }
 
 static void func_event_toggle_channel_1(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_toggle_chan(1);
+    if (INP_STATE_MAKE == code)
+        gui_toggle_chan(1);
 }
 
 static void func_event_toggle_channel_2(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_toggle_chan(2);
+    if (INP_STATE_MAKE == code)
+        gui_toggle_chan(2);
 }
 
 static void func_event_toggle_channel_3(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_toggle_chan(3);
+    if (INP_STATE_MAKE == code)
+        gui_toggle_chan(3);
 }
 
 static void func_event_toggle_channel_4(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_toggle_chan(4);
+    if (INP_STATE_MAKE == code)
+        gui_toggle_chan(4);
 }
 
 static void func_event_toggle_channel_5(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_toggle_chan(5);
+    if (INP_STATE_MAKE == code)
+        gui_toggle_chan(5);
 }
 
 static void func_event_set_filter_0(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_setfilter(0);
+    if (INP_STATE_MAKE == code)
+        gui_setfilter(0);
 }
 
 static void func_event_set_filter_1(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_setfilter(1);
+    if (INP_STATE_MAKE == code)
+        gui_setfilter(1);
 }
 
 static void func_event_set_filter_2(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_setfilter(2);
+    if (INP_STATE_MAKE == code)
+        gui_setfilter(2);
 }
 
 static void func_event_toggle_sprites(int code)
 {
-   if (INP_STATE_MAKE == code)
-      gui_togglesprites();
+    if (INP_STATE_MAKE == code)
+        gui_togglesprites();
 }
 
 static void func_event_palette_hue_up(int code)
 {
-   /* make sure we don't have a VS game */
-   if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
-      return;
+    /* make sure we don't have a VS game */
+    if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
+        return;
 
-   if (INP_STATE_MAKE == code)
-   {
-      pal_inchue();
-      ppu_setdefaultpal(nes_getcontextptr()->ppu);
-   }
+    if (INP_STATE_MAKE == code)
+    {
+        pal_inchue();
+        ppu_setdefaultpal(nes_getcontextptr()->ppu);
+    }
 }
 
 static void func_event_palette_hue_down(int code)
 {
-   /* make sure we don't have a VS game */
-   if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
-      return;
+    /* make sure we don't have a VS game */
+    if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
+        return;
 
-   if (INP_STATE_MAKE == code)
-   {
-      pal_dechue();
-      ppu_setdefaultpal(nes_getcontextptr()->ppu);
-   }
+    if (INP_STATE_MAKE == code)
+    {
+        pal_dechue();
+        ppu_setdefaultpal(nes_getcontextptr()->ppu);
+    }
 }
 
 static void func_event_palette_tint_up(int code)
 {
-   /* make sure we don't have a VS game */
-   if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
-      return;
+    /* make sure we don't have a VS game */
+    if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
+        return;
 
-   if (INP_STATE_MAKE == code)
-   {
-      pal_inctint();
-      ppu_setdefaultpal(nes_getcontextptr()->ppu);
-   }
+    if (INP_STATE_MAKE == code)
+    {
+        pal_inctint();
+        ppu_setdefaultpal(nes_getcontextptr()->ppu);
+    }
 }
 
 static void func_event_palette_tint_down(int code)
 {
-   /* make sure we don't have a VS game */
-   if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
-      return;
+    /* make sure we don't have a VS game */
+    if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
+        return;
 
-   if (INP_STATE_MAKE == code)
-   {
-      pal_dectint();
-      ppu_setdefaultpal(nes_getcontextptr()->ppu);
-   }
+    if (INP_STATE_MAKE == code)
+    {
+        pal_dectint();
+        ppu_setdefaultpal(nes_getcontextptr()->ppu);
+    }
 }
 
 static void func_event_palette_set_default(int code)
 {
-   /* make sure we don't have a VS game */
-   if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
-      return;
+    /* make sure we don't have a VS game */
+    if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
+        return;
 
-   if (INP_STATE_MAKE == code)
-      ppu_setdefaultpal(nes_getcontextptr()->ppu);
+    if (INP_STATE_MAKE == code)
+        ppu_setdefaultpal(nes_getcontextptr()->ppu);
 }
 
 static void func_event_palette_set_shady(int code)
 {
-   /* make sure we don't have a VS game */
-   if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
-      return;
+    /* make sure we don't have a VS game */
+    if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
+        return;
 
-   if (INP_STATE_MAKE == code)
-      ppu_setpal(nes_getcontextptr()->ppu, shady_palette);
+    if (INP_STATE_MAKE == code)
+        ppu_setpal(nes_getcontextptr()->ppu, shady_palette);
 }
 
-static void func_event_joypad1_a(int code)
-{
-   input_event(&kb_input, code, INP_PAD_A);
-}
+static void func_event_joypad1_a(int code) { input_event(&kb_input, code, INP_PAD_A); }
 
-static void func_event_joypad1_b(int code)
-{
-   input_event(&kb_input, code, INP_PAD_B);
-}
+static void func_event_joypad1_b(int code) { input_event(&kb_input, code, INP_PAD_B); }
 
-static void func_event_joypad1_start(int code)
-{
-   input_event(&kb_input, code, INP_PAD_START);
-}
+static void func_event_joypad1_start(int code) { input_event(&kb_input, code, INP_PAD_START); }
 
-static void func_event_joypad1_select(int code)
-{
-   input_event(&kb_input, code, INP_PAD_SELECT);
-}
+static void func_event_joypad1_select(int code) { input_event(&kb_input, code, INP_PAD_SELECT); }
 
-static void func_event_joypad1_up(int code)
-{
-   input_event(&kb_input, code, INP_PAD_UP);
-}
+static void func_event_joypad1_up(int code) { input_event(&kb_input, code, INP_PAD_UP); }
 
-static void func_event_joypad1_down(int code)
-{
-   input_event(&kb_input, code, INP_PAD_DOWN);
-}
+static void func_event_joypad1_down(int code) { input_event(&kb_input, code, INP_PAD_DOWN); }
 
-static void func_event_joypad1_left(int code)
-{
-   input_event(&kb_input, code, INP_PAD_LEFT);
-}
+static void func_event_joypad1_left(int code) { input_event(&kb_input, code, INP_PAD_LEFT); }
 
-static void func_event_joypad1_right(int code)
-{
-   input_event(&kb_input, code, INP_PAD_RIGHT);
-}
+static void func_event_joypad1_right(int code) { input_event(&kb_input, code, INP_PAD_RIGHT); }
 
-static void func_event_joypad2_a(int code)
-{
-   input_event(&kb_alt_input, code, INP_PAD_A);
-}
+static void func_event_joypad2_a(int code) { input_event(&kb_alt_input, code, INP_PAD_A); }
 
-static void func_event_joypad2_b(int code)
-{
-   input_event(&kb_alt_input, code, INP_PAD_B);
-}
+static void func_event_joypad2_b(int code) { input_event(&kb_alt_input, code, INP_PAD_B); }
 
-static void func_event_joypad2_start(int code)
-{
-   input_event(&kb_alt_input, code, INP_PAD_START);
-}
+static void func_event_joypad2_start(int code) { input_event(&kb_alt_input, code, INP_PAD_START); }
 
-static void func_event_joypad2_select(int code)
-{
-   input_event(&kb_alt_input, code, INP_PAD_SELECT);
-}
+static void func_event_joypad2_select(int code) { input_event(&kb_alt_input, code, INP_PAD_SELECT); }
 
-static void func_event_joypad2_up(int code)
-{
-   input_event(&kb_alt_input, code, INP_PAD_UP);
-}
+static void func_event_joypad2_up(int code) { input_event(&kb_alt_input, code, INP_PAD_UP); }
 
-static void func_event_joypad2_down(int code)
-{
-   input_event(&kb_alt_input, code, INP_PAD_DOWN);
-}
+static void func_event_joypad2_down(int code) { input_event(&kb_alt_input, code, INP_PAD_DOWN); }
 
-static void func_event_joypad2_left(int code)
-{
-   input_event(&kb_alt_input, code, INP_PAD_LEFT);
-}
+static void func_event_joypad2_left(int code) { input_event(&kb_alt_input, code, INP_PAD_LEFT); }
 
-static void func_event_joypad2_right(int code)
-{
-   input_event(&kb_alt_input, code, INP_PAD_RIGHT);
-}
+static void func_event_joypad2_right(int code) { input_event(&kb_alt_input, code, INP_PAD_RIGHT); }
 
-static void func_event_songup(int code)
-{
-}
+static void func_event_songup(int code) {}
 
-static void func_event_songdown(int code)
-{
-}
+static void func_event_songdown(int code) {}
 
-static void func_event_startsong(int code)
-{
-}
+static void func_event_startsong(int code) {}
 
 /* NES events */
-static event_t nes_events[] =
-{
-   NULL, /* 0 */
-   func_event_quit,
-   func_event_insert,
-   func_event_eject,
-   func_event_togglepause,
-   func_event_soft_reset,
-   func_event_hard_reset,
-   func_event_snapshot,
-   func_event_toggle_frameskip,
-   /* saves */
-   func_event_state_save,
-   func_event_state_load, /* 10 */
-   func_event_state_slot_0,
-   func_event_state_slot_1,
-   func_event_state_slot_2,
-   func_event_state_slot_3,
-   func_event_state_slot_4,
-   func_event_state_slot_5,
-   func_event_state_slot_6,
-   func_event_state_slot_7,
-   func_event_state_slot_8,
-   func_event_state_slot_9, /* 20 */
-   /* GUI */
-   func_event_gui_toggle_oam,
-   func_event_gui_toggle_wave,
-   func_event_gui_toggle_pattern,
-   func_event_gui_pattern_color_up,
-   func_event_gui_pattern_color_down,
-   func_event_gui_toggle_fps,
-   func_event_gui_display_info,
-   func_event_gui_toggle,
-   /* sound */
-   func_event_toggle_channel_0,
-   func_event_toggle_channel_1, /* 30 */
-   func_event_toggle_channel_2,
-   func_event_toggle_channel_3,
-   func_event_toggle_channel_4,
-   func_event_toggle_channel_5,
-   func_event_set_filter_0,
-   func_event_set_filter_1,
-   func_event_set_filter_2,
-   /* picture */
-   func_event_toggle_sprites,
-   func_event_palette_hue_up,
-   func_event_palette_hue_down,
-   func_event_palette_tint_up, /* 40 */
-   func_event_palette_tint_down,
-   func_event_palette_set_default,
-   func_event_palette_set_shady,
-   /* joypad 1 */
-   func_event_joypad1_a,
-   func_event_joypad1_b,
-   func_event_joypad1_start,
-   func_event_joypad1_select,
-   func_event_joypad1_up,
-   func_event_joypad1_down,
-   func_event_joypad1_left, /* 50 */
-   func_event_joypad1_right,
-   /* joypad 2 */
-   func_event_joypad2_a,
-   func_event_joypad2_b,
-   func_event_joypad2_start,
-   func_event_joypad2_select,
-   func_event_joypad2_up,
-   func_event_joypad2_down,
-   func_event_joypad2_left,
-   func_event_joypad2_right,
-   /* NSF control */
-   NULL, /* 60 */
-   NULL,
-   NULL,
-   /* OS-specific */
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL, /* 70 */
-   NULL,
-   /* last */
-   NULL
-};
+static event_t nes_events[] = {NULL, /* 0 */
+                               func_event_quit,
+                               func_event_insert,
+                               func_event_eject,
+                               func_event_togglepause,
+                               func_event_soft_reset,
+                               func_event_hard_reset,
+                               func_event_snapshot,
+                               func_event_toggle_frameskip,
+                               /* saves */
+                               func_event_state_save,
+                               func_event_state_load, /* 10 */
+                               func_event_state_slot_0,
+                               func_event_state_slot_1,
+                               func_event_state_slot_2,
+                               func_event_state_slot_3,
+                               func_event_state_slot_4,
+                               func_event_state_slot_5,
+                               func_event_state_slot_6,
+                               func_event_state_slot_7,
+                               func_event_state_slot_8,
+                               func_event_state_slot_9, /* 20 */
+                               /* GUI */
+                               func_event_gui_toggle_oam,
+                               func_event_gui_toggle_wave,
+                               func_event_gui_toggle_pattern,
+                               func_event_gui_pattern_color_up,
+                               func_event_gui_pattern_color_down,
+                               func_event_gui_toggle_fps,
+                               func_event_gui_display_info,
+                               func_event_gui_toggle,
+                               /* sound */
+                               func_event_toggle_channel_0,
+                               func_event_toggle_channel_1, /* 30 */
+                               func_event_toggle_channel_2,
+                               func_event_toggle_channel_3,
+                               func_event_toggle_channel_4,
+                               func_event_toggle_channel_5,
+                               func_event_set_filter_0,
+                               func_event_set_filter_1,
+                               func_event_set_filter_2,
+                               /* picture */
+                               func_event_toggle_sprites,
+                               func_event_palette_hue_up,
+                               func_event_palette_hue_down,
+                               func_event_palette_tint_up, /* 40 */
+                               func_event_palette_tint_down,
+                               func_event_palette_set_default,
+                               func_event_palette_set_shady,
+                               /* joypad 1 */
+                               func_event_joypad1_a,
+                               func_event_joypad1_b,
+                               func_event_joypad1_start,
+                               func_event_joypad1_select,
+                               func_event_joypad1_up,
+                               func_event_joypad1_down,
+                               func_event_joypad1_left, /* 50 */
+                               func_event_joypad1_right,
+                               /* joypad 2 */
+                               func_event_joypad2_a,
+                               func_event_joypad2_b,
+                               func_event_joypad2_start,
+                               func_event_joypad2_select,
+                               func_event_joypad2_up,
+                               func_event_joypad2_down,
+                               func_event_joypad2_left,
+                               func_event_joypad2_right,
+                               /* NSF control */
+                               NULL, /* 60 */
+                               NULL,
+                               NULL,
+                               /* OS-specific */
+                               NULL,
+                               NULL,
+                               NULL,
+                               NULL,
+                               NULL,
+                               NULL,
+                               NULL,
+                               NULL, /* 70 */
+                               NULL,
+                               /* last */
+                               NULL};
 
-
-static event_t *event_system_table[NUM_SUPPORTED_SYSTEMS] =
-{
-   NULL, /* unknown */
-   NULL, /* autodetect */
-   nes_events, /* nes */
+static event_t* event_system_table[NUM_SUPPORTED_SYSTEMS] = {
+    NULL,       /* unknown */
+    NULL,       /* autodetect */
+    nes_events, /* nes */
 };
 
 void event_init(void)
 {
-   input_register(&kb_input);
-   input_register(&kb_alt_input);
+    input_register(&kb_input);
+    input_register(&kb_alt_input);
 }
 
 /* set up the event system for a certain console/system type */
 void event_set_system(system_t type)
 {
-   ASSERT(type < NUM_SUPPORTED_SYSTEMS);
+    ASSERT(type < NUM_SUPPORTED_SYSTEMS);
 
-   system_events = event_system_table[type];
+    system_events = event_system_table[type];
 }
 
 void event_set(int index, event_t handler)
 {
-   /* now, event_set is used to set osd-specific events.  We should assume
-   ** (for now, at least) that these events should be used across all
-   ** emulated systems, so let's loop through all system event handler
-   ** tables and add this event...
-   */
-   int i;
+    /* now, event_set is used to set osd-specific events.  We should assume
+    ** (for now, at least) that these events should be used across all
+    ** emulated systems, so let's loop through all system event handler
+    ** tables and add this event...
+    */
+    int i;
 
-   for (i = 0; i < NUM_SUPPORTED_SYSTEMS; i++)
-   {
-      if(event_system_table[i])
-      {
-         event_system_table[i][index] = handler;
-      }
-   }
+    for (i = 0; i < NUM_SUPPORTED_SYSTEMS; i++)
+    {
+        if (event_system_table[i])
+        {
+            event_system_table[i][index] = handler;
+        }
+    }
 }
 
-event_t event_get(int index)
-{
-   return system_events[index];
-}
-
+event_t event_get(int index) { return system_events[index]; }
 
 /*
 ** $Log: event.c,v $

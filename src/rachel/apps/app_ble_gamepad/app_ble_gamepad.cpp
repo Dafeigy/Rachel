@@ -1,12 +1,12 @@
 /**
  * @file app_ble_controller.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-04
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include "app_ble_gamepad.h"
 #include "spdlog/spdlog.h"
@@ -16,21 +16,11 @@
 #include <BleGamepad.h>
 #endif
 
-
 using namespace MOONCAKE::APPS;
 
+void AppBle_gamepad::onCreate() { spdlog::info("{} onCreate", getAppName()); }
 
-void AppBle_gamepad::onCreate()
-{
-    spdlog::info("{} onCreate", getAppName());
-}
-
-
-void AppBle_gamepad::onResume()
-{
-    spdlog::info("{} onResume", getAppName());
-}
-
+void AppBle_gamepad::onResume() { spdlog::info("{} onResume", getAppName()); }
 
 void AppBle_gamepad::onRunning()
 {
@@ -42,15 +32,13 @@ void AppBle_gamepad::onRunning()
     HAL::GetCanvas()->drawCenterString("Rachel BLE Gamepad", 122, 120 - 12);
     HAL::CanvasUpdate();
 
-    // Ram is limit.. 
+    // Ram is limit..
     HAL::GetCanvas()->deleteSprite();
-
 
     auto ble_gamepad = new BleGamepad("Rachel BLE Gamepad");
     BleGamepadConfiguration bleGamepadConfig;
     bleGamepadConfig.setAutoReport(false);
     ble_gamepad->begin(&bleGamepadConfig);
-
 
     uint16_t lx = 0;
     uint16_t ly = 0;
@@ -72,7 +60,6 @@ void AppBle_gamepad::onRunning()
                 lx = 32767;
             ble_gamepad->setX(lx);
             ble_gamepad->setY(ly);
-
 
             if (HAL::GetButton(GAMEPAD::BTN_Y))
                 ble_gamepad->press(BUTTON_1);
@@ -103,13 +90,13 @@ void AppBle_gamepad::onRunning()
                 ble_gamepad->press(BUTTON_6);
             else
                 ble_gamepad->release(BUTTON_6);
-            
+
             ble_gamepad->sendReport();
         }
 
         if (HAL::GetButton(GAMEPAD::BTN_LEFT_STICK))
         {
-            // Long press quit 
+            // Long press quit
             int count = 0;
             while (HAL::GetButton(GAMEPAD::BTN_LEFT_STICK))
             {
@@ -132,8 +119,4 @@ void AppBle_gamepad::onRunning()
 #endif
 }
 
-
-void AppBle_gamepad::onDestroy()
-{
-    spdlog::info("{} onDestroy", getAppName());
-}
+void AppBle_gamepad::onDestroy() { spdlog::info("{} onDestroy", getAppName()); }

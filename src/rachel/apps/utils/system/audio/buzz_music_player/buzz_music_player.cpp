@@ -1,12 +1,12 @@
 /**
  * @file buzz_music_player.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-18
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include <mooncake.h>
 #include "buzz_music_player.h"
@@ -17,9 +17,7 @@
 #include <ArduinoJson.h>
 #endif
 
-
 using namespace SYSTEM::AUDIO;
-
 
 #ifdef ESP_PLATFORM
 void BuzzMusicPlayer::playRaw(BuzzMusic_t* buzzMusic)
@@ -35,17 +33,17 @@ void BuzzMusicPlayer::playRaw(BuzzMusic_t* buzzMusic)
 
     // iterate over the notes of the melody.
     // Remember, the array is twice the number of notes (notes + durations)
-    for (int thisNote = 0; thisNote < notes * 2; thisNote = thisNote + 2) 
+    for (int thisNote = 0; thisNote < notes * 2; thisNote = thisNote + 2)
     {
         // calculates the duration of each note
         divider = buzzMusic->melody[thisNote + 1];
 
-        if (divider > 0) 
+        if (divider > 0)
         {
             // regular note, just proceed
             noteDuration = (wholenote) / divider;
-        } 
-        else if (divider < 0) 
+        }
+        else if (divider < 0)
         {
             // dotted notes are represented with negative durations!!
             noteDuration = (wholenote) / abs(divider);
@@ -65,7 +63,6 @@ void BuzzMusicPlayer::playRaw(BuzzMusic_t* buzzMusic)
         HAL::BeepStop();
     }
 }
-
 
 void BuzzMusicPlayer::playFromSdCard(const char* buzzMusicPath)
 {
@@ -95,9 +92,9 @@ void BuzzMusicPlayer::playFromSdCard(const char* buzzMusicPath)
         music_file.close();
     }
 
-    // Play 
+    // Play
     playRaw(buzz_music);
-    
+
     delete buzz_music;
 }
 #else

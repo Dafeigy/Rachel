@@ -1,23 +1,22 @@
 /**
  * @file app_ble_gamepad.h
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-19
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include <mooncake.h>
 #include "assets/icon_app_ble_gamepad.hpp"
 
-
 namespace MOONCAKE::APPS
 {
     /**
-    * @brief Ble_controller 
-    *
-    */
+     * @brief Ble_controller
+     *
+     */
     class AppBle_gamepad : public APP_BASE
     {
     public:
@@ -32,6 +31,6 @@ namespace MOONCAKE::APPS
         std::string getAppName() override { return "Ble Gamepad"; }
         void* getAppIcon() override { return (void*)image_data_icon_app_ble_gamepad; }
         void* newApp() override { return new AppBle_gamepad; }
-        void deleteApp(void *app) override { delete (AppBle_gamepad*)app; }
+        void deleteApp(void* app) override { delete (AppBle_gamepad*)app; }
     };
-}
+} // namespace MOONCAKE::APPS

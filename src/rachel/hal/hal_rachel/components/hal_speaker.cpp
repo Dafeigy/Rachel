@@ -1,18 +1,17 @@
 /**
  * @file hal_speaker.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-08
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include <mooncake.h>
 #include "../hal_rachel.h"
 #include <Arduino.h>
 #include "../hal_config.h"
-
 
 void HAL_Rachel::_spk_init()
 {
@@ -30,7 +29,6 @@ void HAL_Rachel::_spk_init()
     //     spdlog::error("buzz init failed!");
     //     HAL_LOG_ERROR("buzz init failed!");
     // }
-        
 
     // // Test
     // _spk->tone(4000, 300);
@@ -51,9 +49,6 @@ void HAL_Rachel::_spk_init()
     // _spk->tone(6000, 300);
     // while (_spk->isPlaying())
     //     delay(20);
-
-
-
 
     // while (1)
     // {
@@ -76,10 +71,7 @@ void HAL_Rachel::_spk_init()
 
     //     delay(2000);
     // }
-
-
 }
-
 
 void HAL_Rachel::beep(float frequency, uint32_t duration)
 {
@@ -90,12 +82,7 @@ void HAL_Rachel::beep(float frequency, uint32_t duration)
     tone(HAL_PIN_BUZZ, frequency, duration);
 }
 
-
-void HAL_Rachel::beepStop()
-{
-    noTone(HAL_PIN_BUZZ);
-}
-
+void HAL_Rachel::beepStop() { noTone(HAL_PIN_BUZZ); }
 
 void HAL_Rachel::setBeepVolume(uint8_t volume)
 {

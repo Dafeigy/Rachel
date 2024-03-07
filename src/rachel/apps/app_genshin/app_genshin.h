@@ -1,23 +1,22 @@
 /**
  * @file app_genshin.h
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-04
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #include <mooncake.h>
 #include "assets/icon_app_genshin.hpp"
 
-
 namespace MOONCAKE::APPS
 {
     /**
-    * @brief Genshin 
-    *
-    */
+     * @brief Genshin
+     *
+     */
     class AppGenshin : public APP_BASE
     {
     public:
@@ -32,6 +31,6 @@ namespace MOONCAKE::APPS
         std::string getAppName() override { return "Genshin"; }
         void* getAppIcon() override { return (void*)image_data_icon_app_genshin; }
         void* newApp() override { return new AppGenshin; }
-        void deleteApp(void *app) override { delete (AppGenshin*)app; }
+        void deleteApp(void* app) override { delete (AppGenshin*)app; }
     };
-}
+} // namespace MOONCAKE::APPS

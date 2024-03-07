@@ -29,65 +29,61 @@
 #include <noftypes.h>
 #include <bitmap.h>
 
-void bmp_clear(const bitmap_t *bitmap, uint8 color)
+void bmp_clear(const bitmap_t* bitmap, uint8 color) { memset(bitmap->data, color, bitmap->pitch * bitmap->height); }
+
+static bitmap_t* _make_bitmap(uint8* data_addr, bool hw, int width, int height, int pitch, int overdraw)
 {
-   memset(bitmap->data, color, bitmap->pitch * bitmap->height);
-}
+    bitmap_t* bitmap;
+    int i;
 
-static bitmap_t *_make_bitmap(uint8 *data_addr, bool hw, int width,
-                              int height, int pitch, int overdraw)
-{
-   bitmap_t *bitmap;
-   int i;
+    /* quick safety check */
+    if (NULL == data_addr)
+        return NULL;
 
-   /* quick safety check */
-   if (NULL == data_addr)
-      return NULL;
+    /* Make sure to add in space for line pointers */
+    bitmap = malloc(sizeof(bitmap_t) + (sizeof(uint8*) * height));
+    if (NULL == bitmap)
+        return NULL;
 
-   /* Make sure to add in space for line pointers */
-   bitmap = malloc(sizeof(bitmap_t) + (sizeof(uint8 *) * height));
-   if (NULL == bitmap)
-      return NULL;
+    bitmap->hardware = hw;
+    bitmap->height = height;
+    bitmap->width = width;
+    bitmap->data = data_addr;
+    bitmap->pitch = pitch + (overdraw * 2);
 
-   bitmap->hardware = hw;
-   bitmap->height = height;
-   bitmap->width = width;
-   bitmap->data = data_addr;
-   bitmap->pitch = pitch + (overdraw * 2);
+    /* Set up line pointers */
+    /* we want to make some 32-bit aligned adjustment
+    ** if we haven't been given a hardware bitmap
+    */
+    if (false == bitmap->hardware)
+    {
+        bitmap->pitch = (bitmap->pitch + 3) & ~3;
+        bitmap->line[0] = (uint8*)(((uint32)bitmap->data + overdraw + 3) & ~3);
+    }
+    else
+    {
+        bitmap->line[0] = bitmap->data + overdraw;
+    }
 
-   /* Set up line pointers */
-   /* we want to make some 32-bit aligned adjustment
-   ** if we haven't been given a hardware bitmap
-   */
-   if (false == bitmap->hardware)
-   {
-      bitmap->pitch = (bitmap->pitch + 3) & ~3;
-      bitmap->line[0] = (uint8 *) (((uint32) bitmap->data + overdraw + 3) & ~3);
-   }
-   else
-   {
-      bitmap->line[0] = bitmap->data + overdraw;
-   }
+    for (i = 1; i < height; i++)
+        bitmap->line[i] = bitmap->line[i - 1] + bitmap->pitch;
 
-   for (i = 1; i < height; i++)
-      bitmap->line[i] = bitmap->line[i - 1] + bitmap->pitch;
-
-   return bitmap;
+    return bitmap;
 }
 
 /* Allocate and initialize a bitmap structure */
 #define FRAME_BUFFER_LENGTH ((256 + (2 * 8)) * 240)
 uint8 frameBuffer[FRAME_BUFFER_LENGTH];
-bitmap_t *bmp_create(int width, int height, int overdraw)
+bitmap_t* bmp_create(int width, int height, int overdraw)
 {
     printf("bmp_create: width=%d, height=%d, overdraw=%d\n", width, height, overdraw);
 
-   uint8 *addr;
-   int pitch;
+    uint8* addr;
+    int pitch;
 
-   pitch = width + (overdraw * 2); /* left and right */
-   //addr = malloc((pitch * height) + 3); /* add max 32-bit aligned adjustment */
-   //if (NULL == addr)
+    pitch = width + (overdraw * 2); /* left and right */
+                                    // addr = malloc((pitch * height) + 3); /* add max 32-bit aligned adjustment */
+    // if (NULL == addr)
     //  return NULL;
 
     if (pitch * height > FRAME_BUFFER_LENGTH)
@@ -97,25 +93,25 @@ bitmap_t *bmp_create(int width, int height, int overdraw)
 
     addr = frameBuffer;
 
-   return _make_bitmap(addr, false, width, height, width, overdraw);
+    return _make_bitmap(addr, false, width, height, width, overdraw);
 }
 
 /* allocate and initialize a hardware bitmap */
-bitmap_t *bmp_createhw(uint8 *addr, int width, int height, int pitch)
+bitmap_t* bmp_createhw(uint8* addr, int width, int height, int pitch)
 {
-   return _make_bitmap(addr, true, width, height, pitch, 0); /* zero overdraw */
+    return _make_bitmap(addr, true, width, height, pitch, 0); /* zero overdraw */
 }
 
 /* Deallocate space for a bitmap structure */
-void bmp_destroy(bitmap_t **bitmap)
+void bmp_destroy(bitmap_t** bitmap)
 {
-   if (*bitmap)
-   {
-      if ((*bitmap)->data && false == (*bitmap)->hardware)
-         free((*bitmap)->data);
-      free(*bitmap);
-      *bitmap = NULL;
-   }
+    if (*bitmap)
+    {
+        if ((*bitmap)->data && false == (*bitmap)->hardware)
+            free((*bitmap)->data);
+        free(*bitmap);
+        *bitmap = NULL;
+    }
 }
 
 /*

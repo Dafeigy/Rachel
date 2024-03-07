@@ -19,7 +19,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-       
+
 #include <noftypes.h>
 #include <nofconfig.h>
 #include <log.h>
@@ -28,30 +28,21 @@
 
 #include <version.h>
 
-char configfilename[]="na";
+char configfilename[] = "na";
 
 /* This is os-specific part of main() */
-int osd_main(int argc, char *argv[])
+int osd_main(int argc, char* argv[])
 {
-   config.filename = configfilename;
+    config.filename = configfilename;
 
-   return main_loop("rom", system_nes);
+    return main_loop("rom", system_nes);
 }
 
 /* File system interface */
-void osd_fullname(char *fullname, const char *shortname)
-{
-   strncpy(fullname, shortname, PATH_MAX);
-}
+void osd_fullname(char* fullname, const char* shortname) { strncpy(fullname, shortname, PATH_MAX); }
 
 /* This gives filenames for storage of saves */
-char *osd_newextension(char *string, char *ext)
-{
-   return string;
-}
+char* osd_newextension(char* string, char* ext) { return string; }
 
 /* This gives filenames for storage of PCX snapshots */
-int osd_makesnapname(char *filename, int len)
-{
-   return -1;
-}
+int osd_makesnapname(char* filename, int len) { return -1; }
