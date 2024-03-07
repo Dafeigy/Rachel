@@ -256,8 +256,8 @@ public:
      * 
      * @param volume 
      */
-    [[deprecated("no speaker")]]static void SetBeepVolume(uint8_t volume) { Get()->setBeepVolume(volume); }
-    [[deprecated("no speaker")]]virtual void setBeepVolume(uint8_t volume) {}
+    static void SetBeepVolume(uint8_t volume) { Get()->setBeepVolume(volume); }
+    virtual void setBeepVolume(uint8_t volume) {}
     
     /**
      * @brief Check if sd card is valid, 检查SD卡是否可用

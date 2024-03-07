@@ -1,20 +1,19 @@
 /**
  * @file hal_sdcard.cpp
  * @author Forairaaaaa
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2023-11-08
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
-#include <mooncake.h>
+#include "../hal_config.h"
+#include "../hal_rachel.h"
 #include <Arduino.h>
 #include <FS.h>
 #include <SD.h>
-#include "../hal_rachel.h"
-#include "../hal_config.h"
-
+#include <mooncake.h>
 
 void HAL_Rachel::_sdcard_init()
 {
@@ -34,10 +33,9 @@ void HAL_Rachel::_sdcard_init()
     _is_sd_card_ready = true;
 }
 
-
 void HAL_Rachel::loadTextFont24()
 {
-    bool ret = _canvas->loadFont("/fonts/font_text_24.vlw", SD);
+    bool ret = _canvas->loadFont(SD, "/fonts/font_text_24.vlw");
     if (!ret)
     {
         spdlog::error("load font failed");
@@ -46,13 +44,11 @@ void HAL_Rachel::loadTextFont24()
     _canvas->setTextSize(1);
 }
 
-
 void HAL_Rachel::loadTextFont16()
 {
     // _canvas->setFont(&fonts::efontCN_16);
     // _canvas->setTextSize(1);
 }
-
 
 void HAL_Rachel::loadLauncherFont24()
 {
