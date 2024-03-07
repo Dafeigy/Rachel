@@ -15,6 +15,7 @@ BreakBeforeBraces: Allman
 BinPackArguments: false
 BinPackParameters: false
 AlwaysBreakTemplateDeclarations: Yes
+SortIncludes: Never
 # AllowShortBlocksOnASingleLine: Always
 # AllowShortCaseLabelsOnASingleLine: false
 
